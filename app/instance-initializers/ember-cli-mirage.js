@@ -1,23 +1,14 @@
-import readModules from 'ember-cli-mirage/utils/read-modules';
 import ENV from '../config/environment';
-import baseConfig, { testConfig } from '../mirage/config';
-import Server from 'ember-cli-mirage/server';
-import _assign from 'lodash/object/assign';
 
 export default {
   name: 'ember-cli-mirage',
   initialize: function(application) {
     if (arguments.length > 1) { // Ember < 2.1
-      var container = arguments[0],
-          application = arguments[1];
+      application = arguments[1];
     }
     let environment = ENV.environment;
-
     if (_shouldUseMirage(environment, ENV['ember-cli-mirage'])) {
-      let modules = readModules(ENV.modulePrefix);
-      let options = _assign(modules, {environment, baseConfig, testConfig})
-
-      new Server(options);
+      application.lookup('service:mirage');
     }
   }
 };
